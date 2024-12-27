@@ -1,89 +1,69 @@
-// Sidebar Toggle
-const menuToggle = document.getElementById('menuToggle');
-const sidebar = document.getElementById('sidebar');
-menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-});
+// Sidebar toggle
+        const toggleButton = document.getElementById("menu-toggle");
+        const wrapper = document.getElementById("wrapper");
 
-// Distribution Chart
-const distributionCtx = document.getElementById('distributionChart').getContext('2d');
-new Chart(distributionCtx, {
-    type: 'line',
-    data: {
-        labels: ['Aba', 'Afijio', 'Egbeda', 'Ibadan North', 'Ibarapa East', 'Lagelu', 'Oyo East'],
-        datasets: [
-            {
-                label: 'Male',
-                data: [150, 120, 90, 140, 110, 130, 100],
-                borderColor: 'blue',
-                fill: true,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)'
-            },
-            {
-                label: 'Female',
-                data: [30, 20, 15, 35, 25, 30, 20],
-                borderColor: 'orange',
-                fill: true,
-                backgroundColor: 'rgba(255, 159, 64, 0.2)'
+        toggleButton.addEventListener("click", () => {
+            console.log("Button clicked");
+            wrapper.classList.toggle("toggled");
+
+            if (wrapper.classList.contains("toggled")) {
+                console.log("Adding active class");
+                toggleButton.classList.add("active");
+            } else {
+                console.log("Removing active class");
+                toggleButton.classList.remove("active");
             }
-        ]
-    }
-});
+        });
 
-// Value Chain Chart
-const valueChainCtx = document.getElementById('valueChainChart').getContext('2d');
-new Chart(valueChainCtx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Sheep/Goat', 'Eggs', 'Broilers', 'Pig', 'Dairy', 'Feed'],
-        datasets: [{
-            data: [40, 30, 20, 10, 15, 25],
-            backgroundColor: ['#4CAF50', '#FFC107', '#FF5722', '#2196F3', '#9C27B0', '#607D8B']
-        }]
-    }
-});
+        // Chart.js Example
+        const distributionChart = new Chart(document.getElementById("distributionChart"), {
+            type: "line",
+            data: {
+                labels: ["LGA 1", "LGA 2", "LGA 3"],
+                datasets: [
+                    {
+                        label: "Male",
+                        data: [10, 15, 20],
+                        borderColor: "blue",
+                        fill: false,
+                    },
+                    {
+                        label: "Female",
+                        data: [5, 10, 15],
+                        borderColor: "pink",
+                        fill: false,
+                    },
+                ],
+            },
+        });
 
-// Land Ownership Chart
-const landOwnershipCtx = document.getElementById('landOwnershipChart').getContext('2d');
-new Chart(landOwnershipCtx, {
-    type: 'pie',
-    data: {
-        labels: ['Self Owned', 'Rented', 'Lease', 'Community Owned'],
-        datasets: [{
-            data: [50, 20, 15, 15],
-            backgroundColor: ['#4CAF50', '#FFC107', '#FF5722', '#2196F3']
-        }]
-    }
-});
+        const valueChainChart = new Chart(document.getElementById("valueChainChart"), {
+            type: "pie",
+            data: {
+                labels: ["Category 1", "Category 2", "Category 3"],
+                datasets: [
+                    {
+                        data: [10, 20, 30],
+                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+                    },
+                ],
+            },
+        });
 
-// Crisis History Chart
-const crisisHistoryCtx = document.getElementById('crisisHistoryChart').getContext('2d');
-new Chart(crisisHistoryCtx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Resolved', 'Ongoing', 'Mitigated'],
-        datasets: [{
-            data: [70, 20, 10],
-            backgroundColor: ['#4CAF50', '#FF5722', '#FFC107']
-        }]
-    }
-});
+        const landOwnershipChart = new Chart(document.getElementById("landOwnershipChart"), {
+            type: "doughnut",
+            data: {
+                labels: ["Self-Owned", "Rented", "Community-Owned"],
+                datasets: [
+                    {
+                        data: [40, 30, 30],
+                        backgroundColor: ["#4CAF50", "#FFC107", "#F44336"],
+                    },
+                ],
+            },
+        });
 
-// Map
-const map = L.map('map').setView([7.3775, 3.947], 8);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-}).addTo(map);
-
-// Example markers
-const markerColors = {
-    sheepGoat: 'green',
-    eggs: 'orange',
-    broilers: 'red',
-    dairy: 'blue'
-};
-
-L.circleMarker([7.3775, 3.947], { color: markerColors.sheepGoat, radius: 8 }).addTo(map).bindPopup('Ibadan - Sheep/Goat');
-L.circleMarker([7.55, 3.9], { color: markerColors.eggs, radius: 8 }).addTo(map).bindPopup('Oyo - Eggs');
-L.circleMarker([7.6, 3.95], { color: markerColors.broilers, radius: 8 }).addTo(map).bindPopup('Eruwa - Broilers');
-L.circleMarker([7.4, 4.0], { color: markerColors.dairy, radius: 8 }).addTo(map).bindPopup('Iseyin - Dairy');
+        // Leaflet Map Example
+        const map = L.map("map").setView([7.3775, 3.947], 8);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+        L.marker([7.3775, 3.947]).addTo(map).bindPopup("Oyo State").openPopup();
