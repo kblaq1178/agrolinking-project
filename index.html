@@ -3,145 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oyo State Dashboard</title>
+    <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet/dist/leaflet.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            height: 300px;
+        }
+        .table-container {
+            margin-top: 20px;
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            background-color: #fff;
+            color: #343a40;
+            padding: 20px 0;
+            transition: left 0.3s ease;
+            z-index: 1;
+        }
+        .sidebar.active {
+            left: 0;
+        }
+        .sidebar a {
+            color: #343a40;
+            text-decoration: none;
+            display: block;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .sidebar a:hover {
+            background-color: #f1f1f1;
+            color: #495057;
+        }
+        .sidebar .nav-item .collapse {
+            background-color: #e9ecef;
+            padding-left: 10px;
+        }
+        .sidebar .nav-item .collapse a {
+            font-size: 14px;
+            padding: 8px 20px;
+            color: #6c757d;
+        }
+        .sidebar .nav-item .collapse a:hover {
+            background-color: #dfe3e6;
+            color: #343a40;
+        }
+        .dropdown-toggle {
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 20px;
+        }
+        .dropdown-menu {
+            width: 100%;
+            border: none;
+            box-shadow: none;
+        }
+        .dropdown-item {
+            padding: 10px 20px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .dropdown-item:hover {
+            background-color: #dfe3e6;
+            color: #343a40;
+        }
+        .dropdown-item:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .content {
+            margin-left: 20px;
+            padding: 20px;
+        }
+        .top-header {
+            background-color: white;
+            color: #343a40;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        .top-header h4 {
+            margin: 0;
+        }
+        .menu-toggle {
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .map-legend {
+            background: white;
+            line-height: 1.4;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .col-md-4{
+            align-items: center;
+        }
+        .svg{
+            height: 44px;
+            width: 44px;
+            background-color: rgb(167, 240, 149);
+            padding: 10px;
+            border-radius: 50%;
+            color: green;
+        }
+    </style>
 </head>
 <body>
-    <div class="d-flex" id="wrapper">
-        <!-- Sidebar -->
-        <div class="bg-light border-end" id="sidebar-wrapper">
-            <!-- <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom">Oyo State Dashboard</div> -->
-            <div class="list-group list-group-flush">
-                <a href="#" class="list-group-item list-group-item-action bg-light">
-                    <i class="fas fa-tachometer-alt icon"></i> Dashboard
-                </a>
-                <a href="#businessSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle list-group-item list-group-item-action bg-light">
-                    <i class="fas fa-folder icon"></i> Sections
-                </a>
-                <ul class="collapse list-unstyled" id="businessSubmenu">
-                    <li><a href="#" class="list-group-item list-group-item-action bg-light">Business</a></li>
-                    <li><a href="#" class="list-group-item list-group-item-action bg-light">Market Crisis</a></li>
-                    <li><a href="#" class="list-group-item list-group-item-action bg-light">Profile</a></li>
-                </ul>
-                <a href="#" class="list-group-item list-group-item-action bg-light">
-                    <i class="fas fa-user icon"></i> Farmers' Registration
-                </a>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h4 class="text-center">Oyo State Dashboard</h4>
+        <a href="#" class="nav-link" id="dashboardButton">Dashboard</a>
+        <div class="nav-item dropdown">
+            <a href="#" class="dropdown-toggle" id="sectionsDropdown" role="button" data-bs-toggle="collapse" data-bs-target="#sectionsMenu" aria-expanded="false">
+                Sections
+            </a>
+            <div id="sectionsMenu" class="collapse">
+                <a class="dropdown-item" href="#">Business</a>
+                <a class="dropdown-item" href="#">Market Crisis</a>
+                <a class="dropdown-item" href="#">Profile</a>
             </div>
         </div>
+        <a href="#" class="nav-link">Farmers' Registration</a>
+    </div>
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                <div class="container-fluid">
-                    <button class="btn btn-primary" id="menu-toggle">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <h4 class="ms-3 my-0">Dashboard</h4>
-                </div>
-            </nav>
+    <!-- Top Header -->
+    <div class="top-header">
+        <span class="menu-toggle" id="menuToggle">☰</span>
+        <h4>Dashboard</h4>
+    </div>
 
-            <div class="container-fluid px-4">
-                <!-- Summary Cards -->
-                <div class="row my-4">
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <i class="fas fa-users icon"></i>
-                                <div>
-                                    <h5 class="card-title">Total Respondents</h5>
-                                    <h2 class="card-text">2662</h2>
-                                    <p class="text-muted">77% Male | 22.8% Female</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <i class="fas fa-map-marked-alt icon"></i>
-                                <div>
-                                    <h5 class="card-title">Areas Covered</h5>
-                                    <h2 class="card-text">33 LGAs</h2>
-                                    <p class="text-muted">1746 Communities</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <i class="fas fa-briefcase icon"></i>
-                                <div>
-                                    <h5 class="card-title">Businesses</h5>
-                                    <h2 class="card-text">2662</h2>
-                                    <p class="text-muted">39.5% Registered</p>
-                                </div>
-                            </div>
+    <div class="content mt-5">
+        <div class="container mt-4">
+            <div class="dashboard-header">
+                <h1>Dashboard</h1>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <div class="card shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960" width="44px" class="svg one"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z"/></svg>
+                        <div class="card-body">
+                            <h5>Total Respondents</h5>
+                            <h2>2662</h2>
+                            <p>77% Male | 22.8% Female</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Charts -->
-                <div class="row">
-                    <div class="col-lg-8 mb-4">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">Distribution of Respondents by LGA</h5>
-                                <canvas id="distributionChart"></canvas>
-                            </div>
+                <div class="col-md-4">
+                    <div class="card shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" class="svg"><path d="M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Zm400-400Zm0 240Zm-240 0Zm0-240Z"/></svg>
+                        <div class="card-body">
+                            <h5>Areas Covered</h5>
+                            <h2>33 LGAs</h2>
+                            <p>1746 Communities</p>
                         </div>
                     </div>
-                    <div class="col-lg-4 mb-4">
-                        <div class="card shadow-sm mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Value Chains</h5>
-                                <canvas id="valueChainChart"></canvas>
-                            </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="svg" viewBox="0 -960 960 960" ><path d="M240-80q-33 0-56.5-23.5T160-160v-480q0-33 23.5-56.5T240-720h80q0-66 47-113t113-47q66 0 113 47t47 113h80q33 0 56.5 23.5T800-640v480q0 33-23.5 56.5T720-80H240Zm0-80h480v-480h-80v80q0 17-11.5 28.5T600-520q-17 0-28.5-11.5T560-560v-80H400v80q0 17-11.5 28.5T360-520q-17 0-28.5-11.5T320-560v-80h-80v480Zm160-560h160q0-33-23.5-56.5T480-800q-33 0-56.5 23.5T400-720ZM240-160v-480 480Z"/></svg>
+                        <div class="card-body">
+                            <h5>Businesses</h5>
+                            <h2>2662</h2>
+                            <p>39.5% Registered</p>
                         </div>
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">Land Ownership</h5>
-                                <canvas id="landOwnershipChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts and Graphs -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5>Distribution of Respondents by LGA</h5>
+                            <canvas id="distributionChart" class="chart-container"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow mb-3">
+                        <div class="card-body">
+                            <h5>Value Chains</h5>
+                            <canvas id="valueChainChart" class="chart-container"></canvas>
+                        </div>
+                    </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5>Land Ownership</h5>
+                            <canvas id="landOwnershipChart" class="chart-container"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="card shadow table-container">
+                <div class="card-body">
+                    <h5>All Respondents Data</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>LGA</th>
+                                <th>Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Solomon</td>
+                                <td>Odedele</td>
+                                <td>Aba</td>
+                                <td>080362****</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Ojo</td>
+                                <td>Adelaja Victoria</td>
+                                <td>Afijio</td>
+                                <td>080767****</td>
+                            </tr>
+                            <!-- Additional rows as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Map and Crisis History Section -->
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5>Geographical Distribution</h5>
+                            <div id="map"></div>
+                            <div class="map-legend mt-2">
+                                <strong>Legend:</strong>
+                                <ul>
+                                    <li><span style="color:green">&#9679;</span> Sheep/Goat</li>
+                                    <li><span style="color:orange">&#9679;</span> Eggs</li>
+                                    <li><span style="color:red">&#9679;</span> Broilers</li>
+                                    <li><span style="color:blue">&#9679;</span> Dairy</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Table and Map -->
-                <div class="row">
-                    <div class="col-lg-8 mb-4">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">All Respondents Data</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>First Name</th>
-                                                <th>Last Name</th>
-                                                <th>LGA</th>
-                                                <th>Phone</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Dynamic rows will be inserted here -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 mb-4">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">Geographical Distribution</h5>
-                                <div id="map" style="height: 300px;"></div>
-                            </div>
+                <div class="col-md-4">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5>Crisis History</h5>
+                            <canvas id="crisisHistoryChart" class="chart-container"></canvas>
                         </div>
                     </div>
                 </div>
@@ -149,10 +297,99 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet/dist/leaflet.js"></script>
-    <script src="script.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Distribution Chart
+        const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+        new Chart(distributionCtx, {
+            type: 'line',
+            data: {
+                labels: ['Aba', 'Afijio', 'Egbeda', 'Ibadan North', 'Ibarapa East', 'Lagelu', 'Oyo East'],
+                datasets: [
+                    {
+                        label: 'Male',
+                        data: [150, 120, 90, 140, 110, 130, 100],
+                        borderColor: 'blue',
+                        fill: true,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)'
+                    },
+                    {
+                        label: 'Female',
+                        data: [30, 20, 15, 35, 25, 30, 20],
+                        borderColor: 'orange',
+                        fill: true,
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)'
+                    }
+                ]
+            }
+        });
+
+        // Value Chain Chart
+        const valueChainCtx = document.getElementById('valueChainChart').getContext('2d');
+        new Chart(valueChainCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Sheep/Goat', 'Eggs', 'Broilers', 'Pig', 'Dairy', 'Feed'],
+                datasets: [{
+                    data: [40, 30, 20, 10, 15, 25],
+                    backgroundColor: ['#4CAF50', '#FFC107', '#FF5722', '#2196F3', '#9C27B0', '#607D8B']
+                }]
+            }
+        });
+
+        // Land Ownership Chart
+        const landOwnershipCtx = document.getElementById('landOwnershipChart').getContext('2d');
+        new Chart(landOwnershipCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Self Owned', 'Rented', 'Lease', 'Community Owned'],
+                datasets: [{
+                    data: [50, 20, 15, 15],
+                    backgroundColor: ['#4CAF50', '#FFC107', '#FF5722', '#2196F3']
+                }]
+            }
+        });
+
+        // Crisis History Chart
+        const crisisHistoryCtx = document.getElementById('crisisHistoryChart').getContext('2d');
+        new Chart(crisisHistoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Resolved', 'Ongoing', 'Mitigated'],
+                datasets: [{
+                    data: [70, 20, 10],
+                    backgroundColor: ['#4CAF50', '#FF5722', '#FFC107']
+                }]
+            }
+        });
+
+        // Map
+        const map = L.map('map').setView([7.3775, 3.947], 8);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Example markers
+        const markerColors = {
+            sheepGoat: 'green',
+            eggs: 'orange',
+            broilers: 'red',
+            dairy: 'blue'
+        };
+
+        L.circleMarker([7.3775, 3.947], { color: markerColors.sheepGoat, radius: 8 }).addTo(map).bindPopup('Ibadan - Sheep/Goat');
+        L.circleMarker([7.55, 3.9], { color: markerColors.eggs, radius: 8 }).addTo(map).bindPopup('Oyo - Eggs');
+        L.circleMarker([7.6, 3.95], { color: markerColors.broilers, radius: 8 }).addTo(map).bindPopup('Eruwa - Broilers');
+        L.circleMarker([7.4, 4.0], { color: markerColors.dairy, radius: 8 }).addTo(map).bindPopup('Iseyin - Dairy');
+    </script>
 </body>
 </html>
