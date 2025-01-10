@@ -139,6 +139,31 @@
             border-radius: 50%;
             color: green;
         }
+        .table-container {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
     </style>
 </head>
 <body>
@@ -232,39 +257,29 @@
             </div>
 
             <!-- Table -->
-            <div class="card shadow table-container">
-                <div class="card-body">
-                    <h5>All Respondents Data</h5>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>LGA</th>
-                                <th>Phone</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Solomon</td>
-                                <td>Odedele</td>
-                                <td>Aba</td>
-                                <td>080362****</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Ojo</td>
-                                <td>Adelaja Victoria</td>
-                                <td>Afijio</td>
-                                <td>080767****</td>
-                            </tr>
-                            <!-- Additional rows as needed -->
-                        </tbody>
-                    </table>
-                </div>
+             <div class="body">
+            <div class="table-container">
+                <h2>Entries Table</h2>
+                <table id="entriesTable" class="display">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>LGA</th>
+                            <th>Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table data will be inserted here dynamically -->
+                    </tbody>
+                </table>
             </div>
+        </div>
+            <!-- jQuery -->
+            <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+            <!-- DataTables JS -->
+            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
             <!-- Map and Crisis History Section -->
             <div class="row mt-4">
@@ -386,10 +401,79 @@
             dairy: 'blue'
         };
 
+        // Data array
+        const data = [
+            ["Ishaku", "Sule", "Lere", "8108472062"],
+            ["Samaila", "Emmanuel", "Lere", "8153757066"],
+            ["Murtala", "Yunusa", "Lere", "9036297331"],
+            ["Abdullahi", "Ibrahim", "Lere", "8180228389"],
+            ["Aisha", "Abdullahi", "Lere", "8147712851"],
+            ["Rabiu", "Nazifi", "Lere", "7066147345"],
+            ["Lubabatu", "Murtala", "Lere", "8165712621"],
+            ["Ibrahim", "Suleiman", "Lere", "9095118098"],
+            ["Bala", "Bulus", "Lere", "8090940469"],
+            ["Mohammed", "Ibrahim", "Lere", "7039816664"],
+            ["Garba", "Aminu", "Lere", "7051226309"],
+            ["Maitala", "Auwal", "Lere", "8112770302"],
+            ["Yahaya", "Usman", "Lere", "8135723618"],
+            ["Usman", "Muhammed", "Lere", "7067969336"],
+            ["Shuaibu", "Sani", "Lere", "7068169535"],
+            ["Surajo", "Kyauta", "Lere", "7033885705"],
+            ["Umar", "Shuaibu", "Lere", "8062544649"],
+            ["Umar", "Shuaibu", "Lere", "8062544649"],
+            ["Alhassan", "Audu", "Lere", "7063798179"],
+            ["Alhassan", "Audu", "Lere", "7093798179"],
+            ["Ahamad", "Salisu", "Lere", "9011988967"],
+            ["Haruna", "Idris", "Lere", "8065393445"],
+            ["Haruna", "Idris", "Lere", "8065393445"],
+            ["Rashidu", "Muhammad", "Lere", "8093146895"],
+            ["Ladi", "Pama", "Lere", "7080945793"],
+            ["Yau", "Abdulkadir", "Lere", "8098537776"],
+            ["Dahiru", "Abdullahi", "Lere", "9022583787"],
+            ["Danfulani", "Tende", "Lere", "8160751718"],
+            ["Manasseh", "Bunu", "Lere", "8168779700"],
+            ["Yusuf", "Adumi", "Lere", "8104687079"],
+            ["Fatimah", "Abdulmajeed", "Lere", "7052391556"],
+            ["Hansatu", "Sani", "Lere", "8117270544"],
+            ["Rashida", "Yau", "Lere", "7082725609"],
+            ["Muhammadu", "Fatima", "Lere", "7087135840"],
+            ["Kamaludeen", "Abubakar", "Lere", "9037239977"],
+            ["Aishatu", "Abdullahi", "Lere", "9095784765"],
+            ["Abdullahi", "Usaini", "Lere", "7066541995"],
+            ["Salamatu", "Waziri", "Lere", "7067639179"],
+            ["Samaila", "Usman", "Lere", "8128047271"],
+            ["Abdulrahim", "Suleiman", "Lere", "8037494830"],
+            ["Sani", "Nuhu", "Lere", "9048284599"],
+            ["Saadatu", "Ahmed", "Lere", "8145747137"]
+        ];
+
+        $(document).ready(function () {
+            // Dynamically populate the table
+            const tbody = $("#entriesTable tbody");
+            data.forEach((entry, index) => {
+                const row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${entry[0]}</td>
+                    <td>${entry[1]}</td>
+                    <td>${entry[2]}</td>
+                    <td>${entry[3]}</td>
+                </tr>`;
+                tbody.append(row);
+            });
+
+            // Initialize DataTable
+            $('#entriesTable').DataTable({
+                paging: true,
+                searching: true,
+                pageLength: 10,
+                lengthMenu: [10, 25, 50, 100],
+            });
+        });
         L.circleMarker([7.3775, 3.947], { color: markerColors.sheepGoat, radius: 8 }).addTo(map).bindPopup('Ibadan - Sheep/Goat');
         L.circleMarker([7.55, 3.9], { color: markerColors.eggs, radius: 8 }).addTo(map).bindPopup('Oyo - Eggs');
         L.circleMarker([7.6, 3.95], { color: markerColors.broilers, radius: 8 }).addTo(map).bindPopup('Eruwa - Broilers');
         L.circleMarker([7.4, 4.0], { color: markerColors.dairy, radius: 8 }).addTo(map).bindPopup('Iseyin - Dairy');
     </script>
+    
 </body>
 </html>
