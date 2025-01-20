@@ -1,0 +1,161 @@
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            height: 300px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .table-container {
+            margin-top: 20px;
+            font-size: 0.6rem;
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            background-color: #fff;
+            color: #343a40;
+            padding: 20px 0;
+            transition: left 0.3s ease;
+            z-index: 1;
+        }
+        .sidebar.active {
+            left: 0;
+        }
+        .sidebar a {
+            color: #343a40;
+            text-decoration: none;
+            display: block;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .sidebar a:hover {
+            background-color: #f1f1f1;
+            color: #495057;
+        }
+        .sidebar .nav-item .collapse {
+            background-color: #e9ecef;
+            padding-left: 10px;
+        }
+        .sidebar .nav-item .collapse a {
+            font-size: 14px;
+            padding: 8px 20px;
+            color: #6c757d;
+        }
+        .sidebar .nav-item .collapse a:hover {
+            background-color: #dfe3e6;
+            color: #343a40;
+        }
+        .dropdown-toggle {
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 20px;
+        }
+        .dropdown-menu {
+            width: 100%;
+            border: none;
+            box-shadow: none;
+        }
+        .dropdown-item {
+            padding: 10px 20px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .dropdown-item:hover {
+            background-color: #dfe3e6;
+            color: #343a40;
+        }
+        .dropdown-item:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .content {
+            margin-left: 20px;
+            padding: 20px;
+        }
+        .top-header {
+            background-color: white;
+            color: #343a40;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        .top-header h4 {
+            margin: 0;
+        }
+        .menu-toggle {
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .map-legend {
+            background: white;
+            line-height: 1.4;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .col-md-4{
+            align-items: center;
+        }
+        .svg{
+            height: 44px;
+            width: 44px;
+            background-color: rgb(167, 240, 149);
+            padding: 10px;
+            border-radius: 50%;
+            color: green;
+        }
+        .table-container {
+            /* margin: 20px auto; */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            width: 100%;
+        }
+
+   
