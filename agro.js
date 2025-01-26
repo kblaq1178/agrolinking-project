@@ -148,7 +148,7 @@
             $('#entriesTable').DataTable({
                 paging: true,
                 searching: true,
-                pageLength: 10,
+                pageLength: 25,
                 lengthMenu: [10, 25, 50, 100],
             });
         });

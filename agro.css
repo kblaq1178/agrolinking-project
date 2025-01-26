@@ -1,6 +1,7 @@
         body {
             background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
+        font-family: Arial, sans-serif;
+            
         }
         .card {
             margin-bottom: 20px;
@@ -17,7 +18,7 @@
         }
         .table-container {
             margin-top: 20px;
-            font-size: 0.6rem;
+            font-size: 0.65rem;
         }
         .sidebar {
             height: 100vh;
@@ -105,7 +106,7 @@
             margin: 0;
         }
         .menu-toggle {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             cursor: pointer;
             margin-right: 15px;
         }
@@ -158,4 +159,31 @@
             width: 100%;
         }
 
-   
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            background-color: #007bff !important; /* Blue background */
+            color: white !important; /* White text */
+            border-radius: 5px; /* Rounded corners */
+            padding: 5px 10px;
+            margin: 2px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background-color: #0056b3 !important; /* Darker blue on hover */
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            background-color: #ccc !important; /* Gray for disabled buttons */
+            color: #666 !important;
+            cursor: not-allowed;
+        }
+        
+        @media screen and (max-width: 768px) {
+            #entriesTableContainer {
+                max-width: 100%;
+                width: 100%;
+                padding: 0 10px; /* Add some padding */
+            }
+        }
